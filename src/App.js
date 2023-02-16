@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 
+//menbuat funsi navbar yang akan di panggil di index.js
 function Navbar() {
   return (
     <div className="Navbar">
@@ -29,6 +30,7 @@ function Navbar() {
   );
 }
 
+//menbuat fungsi Body yang akan dipanggil di index.js
 function Body(){
   return (
     <div className='Body'>
@@ -36,4 +38,6 @@ function Body(){
     </div>
   )
 }
+
+//men eksport fungsi yang telah dibuat
 export {Navbar, Body};
