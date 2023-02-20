@@ -76,55 +76,150 @@ const data =[{
    image : faker.image.avatar(),
    date : faker.date.recent(),
    name : faker.name.firstName(),
-   Comment : faker.lorem.lines()
+   Comment : faker.lorem.lines(),
+   like: faker.random.numeric()
 },
 {
    image : faker.image.avatar(),
    date : faker.date.recent(),
    name : faker.name.firstName(),
-   Comment : faker.lorem.lines()
+   Comment : faker.lorem.lines(),
+   like: faker.random.numeric()
 },
 {
    image : faker.image.avatar(),
    date : faker.date.recent(),
    name : faker.name.firstName(),
-   Comment : faker.lorem.lines()
+   Comment : faker.lorem.lines(),
+   like: faker.random.numeric()
 }
 ]
 
-function App(props) {
-   const data = props.date
-   console.log(data)
-   //menarik data dari dalam array, menggunakan map
-   const post = data.map((e) => {
-      // menggunakan moment untuk menbuat format waktu/hari
-      const hari = moment(e.date).startOf('day').fromNow();
-      console.log(hari)
-      //mengebalikan tampilan data yang akan di tampilkan kedalam variabel post
+// function App(props) {
+//    const data = props.date
+//    console.log(data)
+//    //menarik data dari dalam array, menggunakan map
+//    const post = data.map((e) => {
+//       // menggunakan moment untuk menbuat format waktu/hari
+//       const hari = moment(e.date).startOf('day').fromNow();
+//       console.log(hari)
+//       //mengebalikan tampilan data yang akan di tampilkan kedalam variabel post
+//       return (
+//          <div>
+//             <div class="comment">
+//                <a class="avatar">
+//                   <img alt="avatar" src={e.image}/>
+//                </a>
+//                <div class="content">
+//                   <a class="author">{e.name}</a>
+//                   <div class="metadata">
+//                      <span class="date">{hari }</span>
+//                   </div>
+//                   <div class="text">{e.Comment}</div>
+//                </div>
+//             </div>
+//          </div>
+//       )
+//    })
+   
+//    return (<div>
+//       <div class="ui comments">
+//          {post}
+//       </div>
+//    </div>)
+
+// }
+
+// class comenttar 
+class CommentContainer extends React.Component {
+   //menbuat fungsi like bertambah saat mengklik tombol like
+   constructor(props) {
+      super(props);
+      this.state = {
+         count: 0,
+      };
+   }
+   render() {
       return (
-         <div>
-            <div class="comment">
-               <a class="avatar">
-                  <img alt="avatar" src={e.image}/>
+        // menampilkan disain ui
+         <div className="ui container comments">
+            <div className="comment">
+               <a href="/" className="avatar">
+                  <img alt="avatar" src={this.props.avatar}/>
                </a>
-               <div class="content">
-                  <a class="author">{e.name}</a>
-                  <div class="metadata">
-                     <span class="date">{hari }</span>
+               <div className="content">
+                  <a href="/" className="author">
+                     {this.props.name}
+                  </a>
+                  <div className="metadata">
+                     <span className="date">
+                       {this.props.day} at {this.props.time}
+                     </span>
+                     <p>| liked : {this.props.like + this.state.count}</p>
                   </div>
-                  <div class="text">{e.Comment}</div>
+                  <div className="text">{this.props.comment}<br></br>
+                  <button onClick={() => this.setState({count: this.state.count + 1}) }>Like</button>
+                  </div>
                </div>
             </div>
          </div>
       )
-   })
-   
-   return (<div>
-      <div class="ui comments">
-         {post}
-      </div>
-   </div>)
-
+   }
 }
 
-root.render(<App date = {data}/>)
+//class comment untuk mengisi data ke kelas CommentContainer
+class Comments extends React.Component {
+   constructor(props) {
+      super(props);
+      this.state = {
+         count: 0,
+      };
+   }
+   //memanggil kelas CommentContainer dan mengisi data dari database/ array
+   render() {
+      return this.props.data.map((data, index)=> (
+         <div className="commentContainer" key={index}>
+         
+            <CommentContainer
+            avatar={data.image}
+            name={data.name}
+            day ={moment(data.date).format('ddd')}
+            time ={moment(data.date).format('LT')}
+            comment = {data.Comment} 
+            like ={data.like}/>
+   
+         </div>
+      ));
+   }
+}
+
+
+
+class Counting extends React.Component {
+   constructor(props){
+      super(props);
+      this.state = {
+         count : 0,
+      };
+      
+   }
+   render () {
+      return (
+         <div className="commentContainer">
+            <CommentContainer 
+            count = {this.state.count}/>
+             <h1>you cliked {this.state.count} times</h1>;
+             <button onClick={() => this.setState({count: this.state.count + 1})}>clik on me</button>
+         </div>
+     );
+
+   }
+}
+
+
+const App = () => {
+   //mengirim data kedalam comments/array
+   return <div>{<Comments data ={data}/>}</div>;
+}
+
+root.render(<App />)
