@@ -6,15 +6,21 @@ import ReactDOM  from "react-dom/client";
 
 import unsplash from "./unsplash";
 
-class SearcBar extends React.Component {
-   state = {term: ""};
 
+//class componen untuk serch data
+class SearcBar extends React.Component {
+   //maampung kata pencarian dalam term
+   state = {term: ""};
+   
+
+   //mengisi tern dengan kata kunci pencarian
    onFormSubmit = (event) => {
       event.preventDefault();
 
       this.props.onSubmit(this.state.term)
    };
 
+   //tampilan search bar
    render() {
       return(
          <div className="ui segment">
@@ -72,19 +78,25 @@ const root = ReactDOM.createRoot(el);
 //    }
 // }
 
+//class untuk mencari gambar
 class App extends React.Component {
+   //untuk manmapung data yang di cari
    state = { images : []};
 
+
+
    onSearchSubmit = async (term) => {
+      //mencari data pada data unsplash
       const response = await unsplash.get("/search/photos", {
          params: {query: term},
       });
       // console.log(response.data)
-
+       // mengisi hasil data yang didapatkan kedalam images
       this.setState({ images : response.data.results });
       console.log(response.data.results)
    };
-
+ 
+   // tampilan data pada UI
    render() {
       return (
          <div className="ui container" style={ {margintop : "10px"}}>
@@ -99,6 +111,7 @@ class App extends React.Component {
 }
 
 class Photos extends React.Component {
+   //Mengeluarkan data dari array dan menampilkannya
    render () {
       console.log(this.props.data)
       return this.props.data.map((image, index)=> (
