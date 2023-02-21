@@ -1,225 +1,116 @@
 import React from "react";
 import ReactDOM  from "react-dom/client";
 // import { useState } from "react";
-import { faker } from '@faker-js/faker';
-import moment from 'moment';
+// import { faker } from '@faker-js/faker';
+// import moment from 'moment';
 
+import unsplash from "./unsplash";
 
-//menginport(memanggil) fungsi dari app.js
-// import {Navbar, Body} from "./App";
+class SearcBar extends React.Component {
+   state = {term: ""};
 
+   onFormSubmit = (event) => {
+      event.preventDefault();
 
-//menbuat fungsi Dom agar tidak perlu mengulang perintah yang sama
-// function dom (isi1, isi2) {
-//   ReactDOM.render(isi1, document.getElementById(isi2))
-// }
+      this.props.onSubmit(this.state.term)
+   };
 
-
-//menjalanjan fungsi dom dengan mengirim parameter yang dibutuhkan
-// dom(<Navbar/>, 'navbar')
-// dom(<Body />, 'root')
-
-const el = document.getElementById("root")
-const root = ReactDOM.createRoot(el);
-
-// function App () {
-//   // const date = new Date();
-//   // const time = date.toLocaleTimeString();
-//   return <h1>{new Date().toLocaleTimeString()}</h1>;
-
-// }
-// function Coba(props) {
-//   return <h2>halo nama Saya {props.nama}, saya Berkerja sebagai {props.pekerjaan}</h2>
-// }
-
-// function App() {
-//   const [name, setName] =useState();
-//   const [work, setWork] =useState();
-
-//   const [update, setUpdate] = useState(name)
-//   const [update2, setUpdate2] = useState(work)
-  
-//  const hendleChanf = (e) => {
-//     setName(e.target.value )
-//  }
-
-//  const hendle = (e) => {
-//   setWork(e.target.value)
-//  }
-//   // const handleChange =(e) => {}
-
-//   const hendleSubmit = ()=> {
-//    setUpdate(name)
-//    setUpdate2(work)
-  
-//   }
-//   return (
-//     <div>
-//       <form >
-//       <label htmlFor="name">Nama</label>
-//        <input type="text"  name='name' value={name} onChange={hendleChanf} /><br></br>
-//        <label htmlFor="work">work</label>
-//        <input type="text"  name='Work' value={work} onChange={hendle}/>
-//        </form>
-//        <button onClick={hendleSubmit}>send</button>
-//        <h1>hi nama saya {update}</h1>
-//        <h3>Pekerjaan saya adalah {update2}</h3>
-       
-//     </div>
-//  )
-// }
-// const cek = Coba(nama, pekerjaan)
-
-
-//menbuat array untuk menampung data
-const data =[{
-   image : faker.image.avatar(),
-   date : faker.date.recent(),
-   name : faker.name.firstName(),
-   Comment : faker.lorem.lines(),
-   like: faker.random.numeric()
-},
-{
-   image : faker.image.avatar(),
-   date : faker.date.recent(),
-   name : faker.name.firstName(),
-   Comment : faker.lorem.lines(),
-   like: faker.random.numeric()
-},
-{
-   image : faker.image.avatar(),
-   date : faker.date.recent(),
-   name : faker.name.firstName(),
-   Comment : faker.lorem.lines(),
-   like: faker.random.numeric()
-}
-]
-
-// function App(props) {
-//    const data = props.date
-//    console.log(data)
-//    //menarik data dari dalam array, menggunakan map
-//    const post = data.map((e) => {
-//       // menggunakan moment untuk menbuat format waktu/hari
-//       const hari = moment(e.date).startOf('day').fromNow();
-//       console.log(hari)
-//       //mengebalikan tampilan data yang akan di tampilkan kedalam variabel post
-//       return (
-//          <div>
-//             <div class="comment">
-//                <a class="avatar">
-//                   <img alt="avatar" src={e.image}/>
-//                </a>
-//                <div class="content">
-//                   <a class="author">{e.name}</a>
-//                   <div class="metadata">
-//                      <span class="date">{hari }</span>
-//                   </div>
-//                   <div class="text">{e.Comment}</div>
-//                </div>
-//             </div>
-//          </div>
-//       )
-//    })
-   
-//    return (<div>
-//       <div class="ui comments">
-//          {post}
-//       </div>
-//    </div>)
-
-// }
-
-// class comenttar 
-class CommentContainer extends React.Component {
-   //menbuat fungsi like bertambah saat mengklik tombol like
-   constructor(props) {
-      super(props);
-      this.state = {
-         count: 0,
-      };
-   }
    render() {
-      return (
-        // menampilkan disain ui
-         <div className="ui container comments">
-            <div className="comment">
-               <a href="/" className="avatar">
-                  <img alt="avatar" src={this.props.avatar}/>
-               </a>
-               <div className="content">
-                  <a href="/" className="author">
-                     {this.props.name}
-                  </a>
-                  <div className="metadata">
-                     <span className="date">
-                       {this.props.day} at {this.props.time}
-                     </span>
-                     <p>| liked : {this.props.like + this.state.count}</p>
-                  </div>
-                  <div className="text">{this.props.comment}<br></br>
-                  <button onClick={() => this.setState({count: this.state.count + 1}) }>Like</button>
-                  </div>
+      return(
+         <div className="ui segment">
+            <form onSubmit={this.onFormSubmit} className="ui form">
+               <div className="field">
+                  <label>Image Search</label>
+                  <input 
+                  type="text"
+                  velue={this.state.term}
+                  onChange={(e) => this.setState({ term: e.target.value })
+                  }/>
                </div>
-            </div>
+            </form>
          </div>
       )
    }
 }
 
-//class comment untuk mengisi data ke kelas CommentContainer
-class Comments extends React.Component {
-   constructor(props) {
-      super(props);
-      this.state = {
-         count: 0,
-      };
-   }
-   //memanggil kelas CommentContainer dan mengisi data dari database/ array
+const el = document.getElementById("root")
+const root = ReactDOM.createRoot(el);
+
+// class Form extends React.Component {
+//    constructor(props){
+//       super(props);
+//       this.state = { velue: ""};
+
+//       this.handleChange = this.handleChange.bind(this);
+//       this.handleSubmit = this.handleSubmit.bind(this);
+//    }
+
+//    handleChange(event) {
+//       this.setState({velue : event.target.value});
+//    }
+
+//    handleSubmit(event) {
+//       alert("A name was submittted :" + this.state.value)
+//       event.preventDefault();
+//    }
+
+//    render() {
+//       return(
+//          <div>
+//             <form onSubmit={this.handleSubmit}>
+//               <label>
+//                Name :
+//                <input
+//                type="text"
+//                value={this.state.value}
+//                onChange={this.handleChange}/>
+//               </label>
+//               <input type="submit" velue="Submit"/>
+//             </form>
+//          </div>
+//       )
+//    }
+// }
+
+class App extends React.Component {
+   state = { images : []};
+
+   onSearchSubmit = async (term) => {
+      const response = await unsplash.get("/search/photos", {
+         params: {query: term},
+      });
+      // console.log(response.data)
+
+      this.setState({ images : response.data.results });
+      console.log(response.data.results)
+   };
+
    render() {
-      return this.props.data.map((data, index)=> (
-         <div className="commentContainer" key={index}>
-         
-            <CommentContainer
-            avatar={data.image}
-            name={data.name}
-            day ={moment(data.date).format('ddd')}
-            time ={moment(data.date).format('LT')}
-            comment = {data.Comment} 
-            like ={data.like}/>
-   
+      return (
+         <div className="ui container" style={ {margintop : "10px"}}>
+            <SearcBar onSubmit={this.onSearchSubmit} />
+            <div className="ui grid">
+            <Photos data={this.state.images} />
+            </div>
+           
+         </div>
+      )
+   }
+}
+
+class Photos extends React.Component {
+   render () {
+      console.log(this.props.data)
+      return this.props.data.map((image, index)=> (
+         <div className="four wide column" key={index}>
+           <img className="ui rounded image" 
+           src={image.urls.small_s3} 
+           alt={image.alt_description} 
+           width="300" height="300"/>
          </div>
       ));
-   }
+}
 }
 
-
-
-class Counting extends React.Component {
-   constructor(props){
-      super(props);
-      this.state = {
-         count : 0,
-      };
-      
-   }
-   render () {
-      return (
-         <div className="commentContainer">
-            <CommentContainer 
-            count = {this.state.count}/>
-             <h1>you cliked {this.state.count} times</h1>;
-             <button onClick={() => this.setState({count: this.state.count + 1})}>clik on me</button>
-         </div>
-     );
-
-   }
-}
-
-
-const App = () => {
-   //mengirim data kedalam comments/array
-   return <div>{<Comments data ={data}/>}</div>;
-}
 
 root.render(<App />)
