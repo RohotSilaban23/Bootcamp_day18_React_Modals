@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.vidio-item{
+  display: flex !important;
+  align-items: center !important;
+  cursor: pointer;
+}
+
+.vidio-item.item img {
+  max-width: 200px;
+  max-width: 250;
+}
