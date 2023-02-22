@@ -4,22 +4,24 @@ import ReactDOM  from "react-dom/client";
 // import { faker } from '@faker-js/faker';
 // import moment from 'moment';
 
-import youtube from "./youtube";
-import "./App.css"
+import unsplash from "./unsplash";
+
 
 //class componen untuk serch data
 class SearcBar extends React.Component {
-   //maampung kata pencarian dalam term
-   constructor(props) {
+   //menampung kata pencarian dalam imageRef
+   constructor(props){
       super(props);
-      this.vidio = React.createRef()
+
+      this.imageRef= React.createRef()
    }
+   
 
    //mengisi tern dengan kata kunci pencarian
    onFormSubmit = (event) => {
       event.preventDefault();
 
-      this.props.onSubmit(this.vidio.current.value);
+      this.props.onSubmit(this.imageRef.current.value)
    };
 
    //tampilan search bar
@@ -28,13 +30,10 @@ class SearcBar extends React.Component {
          <div className="ui segment">
             <form onSubmit={this.onFormSubmit} className="ui form">
                <div className="field">
-                  <label>Vidio Search</label>
+                  <label>Image Search</label>
                   <input 
                   type="text"
-                  ref={this.vidio}
-                  // onChange={(e) => this.setState({ term: e.target.value })
-                  // }
-                  />
+                  ref={this.imageRef}/>
                </div>
             </form>
          </div>
@@ -84,98 +83,48 @@ const root = ReactDOM.createRoot(el);
 //class untuk mencari gambar
 class App extends React.Component {
    //untuk manmapung data yang di cari
-   state = { vidios : [], selectedVidio: null};
+   state = { images : []};
 
 
 
-   onSearchSubmit = async (tern) => {
-      //mencari data pada data youtube
-      console.log(tern);
-      const response = await youtube.get("/search", {
-         params: {q: tern},
+   onSearchSubmit = async (term) => {
+      //mencari data pada data unsplash
+      const response = await unsplash.get("/search/photos", {
+         params: {query: term},
       });
       // console.log(response.data)
-       // mengisi hasil data yang didapatkan kedalam vidios
-      this.setState({ vidios : response.data.items });
-      this.setState({ selectedVidio : response.data.items[0]})
-      console.log(response.data.items)
+       // mengisi hasil data yang didapatkan kedalam images
+      this.setState({ images : response.data.results });
+      console.log(response.data.results)
    };
-
-   handleChangeVidio = async(Vidio) => {
-      this.setState({ selectedVidio : Vidio})
-   }
  
    // tampilan data pada UI
    render() {
       return (
          <div className="ui container" style={ {margintop : "10px"}}>
             <SearcBar onSubmit={this.onSearchSubmit} />
-            <div className="ui segment ">
-               <div className="ui two column very relaxed grid">
-                  <div className="column eleven wide" >
-                     <VidioDetail data={this.state.selectedVidio} />
-                  </div>
-                  <div className="column five wide">
-                     <Vidio handleChangeVidio={this.handleChangeVidio} vidio={this.state.vidios}  />
-                  </div>
-               </div>
-           
+            <div className="ui grid">
+            <Photos data={this.state.images} />
             </div>
-            
            
          </div>
       )
    }
 }
 
-class Vidio extends React.Component {
+class Photos extends React.Component {
    //Mengeluarkan data dari array dan menampilkannya
-   render () { 
-      const vidio = this.props.vidio
-      const handleChangeVidio = this.props.handleChangeVidio
-      console.log(vidio)
-      return vidio.map((vid, index)=> (
-      <div  className="ui two column grid">
-         <div className="row" key={index}>
-            <div onClick={() => handleChangeVidio(vid)} className="column">
-               <img className="ui small image" 
-               src={vid.snippet.thumbnails.medium.url} />
-            </div>
-            <div className="column">
-                  <a>{vid.snippet.title}</a>
-            </div>
+   render () {
+      console.log(this.props.data)
+      return this.props.data.map((image, index)=> (
+         <div className="four wide column" key={index}>
+           <img className="ui rounded image" 
+           src={image.urls.small_s3} 
+           alt={image.alt_description} 
+           width="300" height="300"/>
          </div>
-            
-      </div>   
-           
-         
       ));
 }
-}
-
-class VidioDetail extends React.Component {
-   
-
-   render() {
-      console.log(this.props.data)
-      const vid = this.props.data
-      if(!vid){
-         return <div>Silahkan Ketikkan Penacrian terlebih Dahulu!!</div>
-      }
-      const tampil = `https://www.youtube.com/embed/${vid.id.videoId}`;
-      return (
-         <div>
-         <div className="ui embed" >
-            <iframe src={tampil} ></iframe>
-         </div>
-            <div className="content ui segment" >
-             <h4 className="ui header">{vid.snippet.title}</h4>
-             <p>{vid.snippet.description}</p>
-
-           </div>
-         </div>
-      )
-   }
 }
 
 
