@@ -4,7 +4,9 @@ import { decrement, increment, reset } from './counterslice'
 
 
 function Counter() {
+  //untuk menerima nilai hasil 
   const count = useSelector((state) => state.counter.value)
+  //untuk mengirim value dari button
   const dispatch = useDispatch()
 
   return (
