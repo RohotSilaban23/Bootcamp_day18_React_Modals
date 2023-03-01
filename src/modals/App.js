@@ -1,6 +1,5 @@
 import React, {useState} from "react";
-import Modal from "./modals"
-import DataForm from "./form"
+import Modal from "../modals"
 
 const BUTTON_WRAPPER_STYLES = {
     positin: "relative",
@@ -22,9 +21,9 @@ export default function App() {
          <div style={BUTTON_WRAPPER_STYLES} onClick={ () => console.log("cliked")}>
             <button onClick={() => setIsOpen(true)}>Open Modal</button>
  
-            
-            <Modal open={isOpen} onClose={() =>setIsOpen(false)} >
-               <DataForm />
+
+            <Modal open={isOpen} onClick={() =>setIsOpen(false)} >
+               <br></br>Fancy Modal
             </Modal>
          </div>
 
